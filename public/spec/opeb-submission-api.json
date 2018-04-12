@@ -1,0 +1,24 @@
+{
+  "components": {
+    "parameters": {},
+    "schemas": {}
+  },
+  "info": {
+    "title": "opeb-submission-api",
+    "version": "0.0.1"
+  },
+  "openapi": "3.0.0",
+  "paths": {
+    "/": {
+      "get": {
+        "description": "Index endpoint description",
+        "responses": {
+          "200": {
+            "description": "returned index string"
+          }
+        }
+      }
+    }
+  },
+  "tags": []
+}
