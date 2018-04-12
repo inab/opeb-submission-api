@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import json
 import logging
+import argparse
 
 from flask import Flask, session, redirect, url_for, escape, request, jsonify
 
@@ -15,6 +16,7 @@ app = Flask(__name__)
 spec = APISpec(
     title='opeb-submission-api',
     version='0.0.1',
+    openapi_version='3.0.0',
     plugins=[
         'apispec.ext.flask',
         'apispec.ext.marshmallow',
@@ -31,7 +33,6 @@ def index():
         responses:
             200:
                 description: returned index string
-                type: string
 
     """
     if 'username' in session:
@@ -66,5 +67,15 @@ with app.test_request_context():
     spec.add_path(view=index)
 
 if __name__ == '__main__':
-    print(spec.to_dict())
-    app.run()
+    # app.run()
+
+    parser = argparse.ArgumentParser(description='opeb-submission-api')
+    parser.add_argument(
+        "mode", choices=['spec', 'api'], help="Generate OpenAPIv3 spec | Launch the opeb-submission-api", type=str)
+    args = parser.parse_args()
+    if args.mode == 'spec':
+        with open('public/spec/opeb-submission-api.json', 'w') as api_file:
+            json.dump(spec.to_dict(), api_file, indent=2, sort_keys=True)
+        print('spec generated succesful!')
+    elif args.mode == 'api':
+        print('API')
