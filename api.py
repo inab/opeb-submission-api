@@ -6,6 +6,7 @@ import argparse
 from flask import Flask, session, redirect, url_for, escape, request, jsonify
 
 from apispec import APISpec
+from apispec.utils import validate_swagger
 from marshmallow import Schema, fields
 
 logging.basicConfig(level=logging.DEBUG)
@@ -74,8 +75,15 @@ if __name__ == '__main__':
         "mode", choices=['spec', 'api'], help="Generate OpenAPIv3 spec | Launch the opeb-submission-api", type=str)
     args = parser.parse_args()
     if args.mode == 'spec':
-        with open('public/spec/opeb-submission-api.json', 'w') as api_file:
-            json.dump(spec.to_dict(), api_file, indent=2, sort_keys=True)
-        print('spec generated succesful!')
+        spec_filename = 'opeb-submission-api.json'
+        try:
+            validate_swagger(spec)
+            with open(f'public/spec/{spec_filename}', 'w') as api_file:
+                json.dump(spec.to_dict(), api_file, indent=2, sort_keys=True)
+            print(
+                f'\033[32m{spec_filename} spec generated and validated against OpenAPIv3 succesfully!\033[0m')
+        except:
+            print(
+                f"\033[31mError: {spec_filename} couldn't be validated against OpenAPIv3!\033[0m", file=sys.stderr)
     elif args.mode == 'api':
         print('API')
