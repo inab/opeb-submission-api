@@ -11,7 +11,7 @@ from marshmallow import Schema, fields
 
 logging.basicConfig(level=logging.DEBUG)
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='', static_folder='public')
 
 # Create an APISpec
 spec = APISpec(
@@ -36,9 +36,10 @@ def index():
                 description: returned index string
 
     """
-    if 'username' in session:
-        return 'index<br><br>Logged in as %s' % escape(session['username'])
-    return 'index<br><br>You are not logged in'
+    # if 'username' in session:
+    #     return 'index<br><br>Logged in as %s' % escape(session['username'])
+    # return 'index<br><br>You are not logged in'
+    return app.send_static_file('index.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -52,6 +53,11 @@ def login():
           <p><input type=submit value=Login>
       </form>
   '''
+
+
+@app.route('/logged')
+def logged():
+    return 'logged!!!'
 
 
 @app.route('/logout')
@@ -68,8 +74,6 @@ with app.test_request_context():
     spec.add_path(view=index)
 
 if __name__ == '__main__':
-    # app.run()
-
     parser = argparse.ArgumentParser(description='opeb-submission-api')
     parser.add_argument(
         "mode", choices=['spec', 'api'], help="Generate OpenAPIv3 spec | Launch the opeb-submission-api", type=str)
@@ -86,4 +90,4 @@ if __name__ == '__main__':
             print(
                 f"\033[31mError: {spec_filename} couldn't be validated against OpenAPIv3!\033[0m", file=sys.stderr)
     elif args.mode == 'api':
-        print('API')
+        app.run()
