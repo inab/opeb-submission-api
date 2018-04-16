@@ -3,6 +3,10 @@ import json
 import logging
 import argparse
 
+from pymongo import MongoClient
+# pprint library is used to make the output look more pretty
+from pprint import pprint
+
 from flask import Flask, session, redirect, url_for, escape, request, jsonify
 
 from apispec import APISpec
@@ -68,11 +72,9 @@ with app.test_request_context():
     spec.add_path(view=index)
 
 if __name__ == '__main__':
-    # app.run()
-
     parser = argparse.ArgumentParser(description='opeb-submission-api')
     parser.add_argument(
-        "mode", choices=['spec', 'api'], help="Generate OpenAPIv3 spec | Launch the opeb-submission-api", type=str)
+        "mode", choices=['spec', 'api', 'db'], help="Generate OpenAPIv3 spec | Launch the opeb-submission-api | Operate with the MongoDB database", type=str)
     args = parser.parse_args()
     if args.mode == 'spec':
         spec_filename = 'opeb-submission-api.json'
@@ -86,4 +88,13 @@ if __name__ == '__main__':
             print(
                 f"\033[31mError: {spec_filename} couldn't be validated against OpenAPIv3!\033[0m", file=sys.stderr)
     elif args.mode == 'api':
-        print('API')
+        app.run()
+    elif args.mode == 'db':
+        client = MongoClient('localhost', 27017)
+        db = client.admin
+        collection = db.test_collection
+        test_document = {'name': 'name test', 'content': 'content test'}
+        document_id = collection.insert_one(test_document).inserted_id
+        print(f'document id: {document_id}')
+        get_document = collection.find_one()
+        print(f'Get document: {get_document["name"]}')

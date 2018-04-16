@@ -2,3 +2,4 @@ flask-restful
 Flask-OIDC
 APISpec
 marshmallow
+pymongo
