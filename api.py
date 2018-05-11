@@ -72,18 +72,57 @@ def participant_status():
         responses:
             200:
                 description: "JSON containing the state: open, checking, checked, wrong, queued, evaluating, valid, signed-off. The JSON also contains a brief report with the potential links to be used next."
-            404:
-                description: It can also return 404 on error (the benchmarking event id does not exist, or the participant is not enrolled in this event)
             400:
                 description: generic error
+            404:
+                description: It can also return 404 on error (the benchmarking event id does not exist, or the participant is not enrolled in this event)
     """
     return 'TODO: participant_status'
+
+
+@app.route('/submission/<int:benchmarking_event_id>/<int:participant_id>/check_integrity')
+def participant_check_integrity():
+    """Participant check integrity endpoint.
+    ---
+    get:
+        description: Participant check integrity endpoint description
+        parameters:
+            - in: path
+              name: benchmarking_event_id
+              required: true
+              schema:
+                type: integer
+            - in: path
+              name: participant_id
+              required: true
+              schema:
+                type: integer
+        responses:
+            201:
+                description: "(immediate check, changing to checked state). It returns a Location header with the evaluation location, in the form /evaluation/{evaluation token}"
+                content:
+                    "application/json":
+                        schema:
+                            type: string
+
+            202:
+                description: "(delayed check, changing to checking state). It returns a Location header with the check location, in the form /check_status/{checking token} "
+            400:
+                description: integrity error (changing to wrong state)
+            404:
+                description: the benchmarking event id does not exist, or the participant is not enrolled in this event
+            405:
+                description: the benchmarking event id is not in open state
+
+    """
+    return 'TODO: participant_check_integrity'
 
 
 with app.test_request_context():
     spec.add_path(view=index)
     spec.add_path(view=submissions)
     spec.add_path(view=participant_status)
+    spec.add_path(view=participant_check_integrity)
 
 if __name__ == '__main__':
 
