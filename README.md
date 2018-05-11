@@ -1,14 +1,14 @@
 # opeb-submission-api
 
-- [Summary](#Summary)
-- [Instalation](#Instalation)
-- [Usage](#Usage)
-  - [Spec](#Spec)
-  - [API](#API)
+- [Summary](#summary)
+- [Requirements](#requirements)
+- [Usage](#usage)
+  - [Spec](#spec)
+  - [API](#api)
 
 ## Summary
 
-## Instalation
+## Requirements
 ```
   pip3 install pipenv
   pipenv install -r requirements.txt
