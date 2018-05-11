@@ -19,6 +19,40 @@
         }
       }
     },
+    "/submission/{benchmarking_event_id}/{participant_id}/status": {
+      "get": {
+        "description": "Participant status endpoint description",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "benchmarking_event_id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "path",
+            "name": "participant_id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON containing the state: open, checking, checked, wrong, queued, evaluating, valid, signed-off. The JSON also contains a brief report with the potential links to be used next."
+          },
+          "400": {
+            "description": "generic error"
+          },
+          "404": {
+            "description": "It can also return 404 on error (the benchmarking event id does not exist, or the participant is not enrolled in this event)"
+          }
+        }
+      }
+    },
     "/submissions": {
       "get": {
         "description": "Submissions endpoint description",

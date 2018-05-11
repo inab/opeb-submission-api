@@ -52,12 +52,23 @@ def submissions():
     return 'TODO: submissions'
 
 
-@app.route('/submission/<int:benchmarking_event_id>/<int:participant_id>/status ')
+@app.route('/submission/<int:benchmarking_event_id>/<int:participant_id>/status')
 def participant_status():
     """Participant status endpoint.
     ---
     get:
         description: Participant status endpoint description
+        parameters:
+            - in: path
+              name: benchmarking_event_id
+              required: true
+              schema:
+                type: integer
+            - in: path
+              name: participant_id
+              required: true
+              schema:
+                type: integer
         responses:
             200:
                 description: "JSON containing the state: open, checking, checked, wrong, queued, evaluating, valid, signed-off. The JSON also contains a brief report with the potential links to be used next."
