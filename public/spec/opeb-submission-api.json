@@ -18,6 +18,16 @@
           }
         }
       }
+    },
+    "/submissions": {
+      "get": {
+        "description": "Submissions endpoint description",
+        "responses": {
+          "200": {
+            "description": "It returns the submissions associated to the participants identified by the login credentials (the same credential could manage more than one participant), as a JSON array of URIs in the form /submission/{benchmarking event id}/{participant id}/status."
+          }
+        }
+      }
     }
   },
   "tags": []

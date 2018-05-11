@@ -36,39 +36,29 @@ def index():
                 description: returned index string
 
     """
-    if 'username' in session:
-        return 'index<br><br>Logged in as %s' % escape(session['username'])
-    return 'index<br><br>You are not logged in'
+    return 'Index'
 
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        session['username'] = request.form['username']
-        return redirect(url_for('index'))
-    return '''
-      <form method="post">
-          <p><input type=text name=username>
-          <p><input type=submit value=Login>
-      </form>
-  '''
+@app.route('/submissions')
+def submissions():
+    """Submissions endpoint.
+    ---
+    get:
+        description: Submissions endpoint description
+        responses:
+            200:
+                description: It returns the submissions associated to the participants identified by the login credentials (the same credential could manage more than one participant), as a JSON array of URIs in the form /submission/{benchmarking event id}/{participant id}/status.
 
 
-@app.route('/logout')
-def logout():
-    # remove the username from the session if it's there
-    session.pop('username', None)
-    return redirect(url_for('index'))
+    """
+    return 'TODO: submissions'
 
-
-# set the secret key.  keep this really secret:
-app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 with app.test_request_context():
     spec.add_path(view=index)
+    spec.add_path(view=submissions)
 
 if __name__ == '__main__':
-    # app.run()
 
     parser = argparse.ArgumentParser(description='opeb-submission-api')
     parser.add_argument(
@@ -86,4 +76,4 @@ if __name__ == '__main__':
             print(
                 f"\033[31mError: {spec_filename} couldn't be validated against OpenAPIv3!\033[0m", file=sys.stderr)
     elif args.mode == 'api':
-        print('API')
+        app.run()
